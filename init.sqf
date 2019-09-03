@@ -12,10 +12,30 @@ if (hasInterface) then {
 		disableSerialization;
 		private _ctrl = uiNamespace getVariable "IGUI_Vehicle_Seatbelt";
 		if (vehicle player == player) exitWith { _ctrl ctrlSetText ""; _ctrl ctrlCommit 0; };
-		_ctrl ctrlSetText "\Armitxes_Seatbelt\images\belt.paa";
+		_ctrl ctrlSetText "\Armitxes_Seatbelts\images\belt.paa";
 		if (_tryWear) then { ARMI_Seatbelt = true; _ctrl ctrlSetTextColor [255, 255, 255, 1]; }
 		else { ARMI_Seatbelt = false; _ctrl ctrlSetTextColor [1, 0, 0, 1]; };
 		_ctrl ctrlCommit 0;	
+	};
+
+	ARMI_fnc_ResetIcon = {
+		disableSerialization;
+		private _igui_dsps = uiNamespace getVariable ["IGUI_displays", []];
+		{
+			private _spdbag = _x displayCtrl 1006;
+			private _speed = _x displayCtrl 121;
+			if (!isNil "_spdbag" && !isNil "_speed") exitWith {
+				uiNamespace setVariable ["IGUI_Vehicle", _x];
+
+				disableSerialization;
+				private _dsp = uiNamespace getVariable "IGUI_Vehicle";
+				private _ctrl = _dsp ctrlCreate ["RscPicture", 22];
+				_ctrl ctrlSetPosition [0.115 * safezoneW + safezoneX, 0.087 * safezoneH + safezoneY, 0.025, 0.025];
+				_ctrl ctrlSetText "";
+				_ctrl ctrlCommit 0;
+				uiNamespace setVariable ["IGUI_Vehicle_Seatbelt", _ctrl];
+			};
+		} forEach _igui_dsps;
 	};
 
 	/*
@@ -31,28 +51,7 @@ if (hasInterface) then {
 		};
 	}];
 
-	_igui_dsps = uiNamespace getVariable ["IGUI_displays", []];
-	{
-		// Current result is saved in variable _x
-		_spdbag = _x displayCtrl 1006;
-		_speed = _x displayCtrl 121;
-		if (!isNil "_spdbag" && !isNil "_speed") exitWith {
-			uiNamespace setVariable ["IGUI_Vehicle", _x];
-
-			disableSerialization;
-			_dsp = uiNamespace getVariable "IGUI_Vehicle";
-			_ctrl = _dsp ctrlCreate ["BG_Tiny_base", 22];
-			_ctrl ctrlSetPosition [
-				0.115 * safezoneW + safezoneX,
-				0.087 * safezoneH + safezoneY,
-				0.025, 0.025
-			];
-			_ctrl ctrlSetText "";
-			_ctrl ctrlCommit 0;
-			uiNamespace setVariable ["IGUI_Vehicle_Seatbelt", _ctrl];
-		}
-	} forEach _igui_dsps;
-
-	player addEventHandler ["GetInMan", { _this execVM "\Armitxes_Seatbelt\events\onVehicleEnter.sqf"; }];
-	player addEventHandler ["GetOutMan", { _this execVM "\Armitxes_Seatbelt\events\onVehicleLeave.sqf"; }];
+	[] spawn ARMI_fnc_ResetIcon;
+	player addEventHandler ["GetInMan", { _this execVM "\Armitxes_Seatbelts\events\onVehicleEnter.sqf"; }];
+	player addEventHandler ["GetOutMan", { _this execVM "\Armitxes_Seatbelts\events\onVehicleLeave.sqf"; }];
 };
