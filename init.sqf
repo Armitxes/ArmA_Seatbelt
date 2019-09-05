@@ -51,7 +51,7 @@ if (hasInterface) then {
 		};
 	}];
 
-	[] spawn ARMI_fnc_ResetIcon;
+	if (vehicle player != player) then { [] execVM "\Armitxes_Seatbelts\events\onVehicleEnter.sqf"; };
 	player addEventHandler ["GetInMan", { _this execVM "\Armitxes_Seatbelts\events\onVehicleEnter.sqf"; }];
 	player addEventHandler ["GetOutMan", { _this execVM "\Armitxes_Seatbelts\events\onVehicleLeave.sqf"; }];
 };
