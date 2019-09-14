@@ -51,7 +51,8 @@ if (hasInterface) then {
 		};
 	}];
 
-	if (vehicle player != player) then { [] execVM "\Armitxes_Seatbelts\events\onVehicleEnter.sqf"; };
+	if (vehicle player == player) then { [] execVM "\Armitxes_Seatbelts\events\onVehicleLeave.sqf"; }
+	else { [] execVM "\Armitxes_Seatbelts\events\onVehicleEnter.sqf"; };
 	player addEventHandler ["GetInMan", { _this execVM "\Armitxes_Seatbelts\events\onVehicleEnter.sqf"; }];
 	player addEventHandler ["GetOutMan", { _this execVM "\Armitxes_Seatbelts\events\onVehicleLeave.sqf"; }];
 };
