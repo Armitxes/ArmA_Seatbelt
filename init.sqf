@@ -30,7 +30,16 @@ if (hasInterface) then {
 				disableSerialization;
 				private _dsp = uiNamespace getVariable "IGUI_Vehicle";
 				private _ctrl = _dsp ctrlCreate ["RscPicture", 22];
-				_ctrl ctrlSetPosition [0.115 * safezoneW + safezoneX, 0.087 * safezoneH + safezoneY, 0.025, 0.025];
+
+				private _szX = ((safezoneW / safezoneH) min 1.2) / 40;
+				private _szY = (((safezoneW / safezoneH) min 1.2) / 1.2) / 25;
+
+				_ctrl ctrlSetPosition [
+					(0.1 * _szX + (profilenamespace getVariable ["IGUI_GRID_VEHICLE_X", (safezoneX + 0.5 * _szX)])) + (9.8 * _szX) - (0.8 * _szX),
+					3.4 * _szY + (profilenamespace getvariable ["IGUI_GRID_VEHICLE_Y", (safezoneY + 0.5 * _szY)]),
+					0.8 * _szX,
+					0.8 * _szY
+				];
 				_ctrl ctrlSetText "";
 				_ctrl ctrlCommit 0;
 				uiNamespace setVariable ["IGUI_Vehicle_Seatbelt", _ctrl];
